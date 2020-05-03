@@ -1,14 +1,11 @@
-import Body from "/src/body";
+import World from "/src/world";
 import Screen from "/src/screen";
 
 let canvas = document.getElementById("screen");
 let ctx = canvas.getContext("2d");
 
 let scr = new Screen(ctx, 800, 600);
-
-let bodies = Array(10)
-  .fill()
-  .map(i => new Body(ctx, scr));
+let world = new World(ctx, scr, 5);
 
 let lastTime = 0;
 function loop(timestamp) {
@@ -16,11 +13,7 @@ function loop(timestamp) {
   lastTime = timestamp;
 
   scr.clear(0);
-
-  bodies.forEach(b => {
-    b.update(dt);
-    b.draw();
-  });
+  world.update(dt);
 
   requestAnimationFrame(loop);
 }

@@ -1,16 +1,18 @@
 import { getRandomInt, getRandomColor } from "/src/utils";
 
 export default class Body {
-  constructor(ctx, scr) {
-    this._w = 50;
-    this._h = 50;
+  constructor(ctx, scr, id) {
+    this.id = id;
+
+    this._w = 100;
+    this._h = 100;
 
     this._x = getRandomInt(scr.w - this._w) + 1;
     this._y = getRandomInt(scr.h - this._h) + 1;
 
-    this.d = {
-      x: Math.random() < 0.5 ? -1 : 1,
-      y: Math.random() < 0.5 ? -1 : 1
+    this.v = {
+      x: (Math.random() < 0.5 ? -1 : 1) * Math.random(),
+      y: (Math.random() < 0.5 ? -1 : 1) * Math.random()
     };
 
     this._ctx = ctx;
@@ -35,6 +37,10 @@ export default class Body {
     return this._h;
   }
 
+  getR() {
+    return this._w / 2;
+  }
+
   draw() {
     //this._ctx.fillStyle = this.color;
     //this._ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -52,24 +58,24 @@ export default class Body {
     if (!dt) return;
 
     if (this._scr.collidesLeftWith(this)) {
-      this.d.x = 1;
+      this.v.x = 1;
     }
 
     if (this._scr.collidesRightWith(this)) {
-      this.d.x = -1;
+      this.v.x = -1;
     }
 
     if (this._scr.collidesTopWith(this)) {
-      this.d.y = 1;
+      this.v.y = 1;
     }
 
     if (this._scr.collidesBottomWith(this)) {
-      this.d.y = -1;
+      this.v.y = -1;
     }
 
-    let step = 20 / dt;
+    let step = 30 / dt;
 
-    this._x = this._x + step * this.d.x;
-    this._y = this._y + step * this.d.y;
+    this._x = this._x + step * this.v.x;
+    this._y = this._y + step * this.v.y;
   }
 }

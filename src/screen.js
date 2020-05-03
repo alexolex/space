@@ -4,6 +4,7 @@ export default class Screen {
     this.h = h;
 
     this._ctx = ctx;
+    this._bodies = [];
   }
 
   clear() {
