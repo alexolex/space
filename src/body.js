@@ -1,16 +1,14 @@
-import { getRandomInt, getRandomColor } from "/src/utils";
+import { getRandomInt, getRandomColor } from "/src/utils.js";
 
 export default class Body {
-  constructor(ctx, scr, id) {
-    this.id = id;
-
+  constructor(ctx, scr) {
     this._w = 100;
     this._h = 100;
 
     this._x = getRandomInt(scr.w - this._w) + 1;
     this._y = getRandomInt(scr.h - this._h) + 1;
 
-    this.v = {
+    this._v = {
       x: (Math.random() < 0.5 ? -1 : 1) * Math.random(),
       y: (Math.random() < 0.5 ? -1 : 1) * Math.random()
     };
@@ -58,24 +56,25 @@ export default class Body {
     if (!dt) return;
 
     if (this._scr.collidesLeftWith(this)) {
-      this.v.x = 1;
+      this._v.x = 1;
     }
 
     if (this._scr.collidesRightWith(this)) {
-      this.v.x = -1;
+      this._v.x = -1;
     }
 
     if (this._scr.collidesTopWith(this)) {
-      this.v.y = 1;
+      this._v.y = 1;
     }
 
     if (this._scr.collidesBottomWith(this)) {
-      this.v.y = -1;
+      this._v.y = -1;
     }
 
     let step = 30 / dt;
 
-    this._x = this._x + step * this.v.x;
-    this._y = this._y + step * this.v.y;
+    // move
+    this._x = this._x + step * this._v.x;
+    this._y = this._y + step * this._v.y;
   }
 }

@@ -1,4 +1,4 @@
-import Body from "/src/body";
+import Body from "/src/body.js";
 
 export default class World {
   constructor(ctx, scr, bodiesNum) {
@@ -6,7 +6,13 @@ export default class World {
       .fill()
       .map(i => new Body(ctx, scr, i));
 
+    //TODO: do we need scr here?
+    // this._scr = scr;
     this._ctx = ctx;
+  }
+
+  addBody(body) {
+    this._bodies.push(body);
   }
 
   collide(bi, bj) {
@@ -17,25 +23,25 @@ export default class World {
     if (d <= bi.getR() + bj.getR()) {
       // collision
       bi.overlaps = true;
-      var v = {
-        x: bi.v.x,
-        y: bi.v.y
+      var buf = {
+        x: bi._v.x,
+        y: bi._v.y
       };
 
-      bi.v.x = bj.v.x;
-      bi.v.y = bj.v.y;
+      bi._v.x = bj._v.x;
+      bi._v.y = bj._v.y;
 
-      bj.v.x = v.x;
-      bj.v.y = v.y;
+      bj._v.x = buf.x;
+      bj._v.y = buf.y;
 
       // split bodies
       var offset = bi.getR() + bj.getR() - d;
 
-      bi._x = bi._x + offset * bi.v.x;
-      bi._y = bi._y + offset * bi.v.y;
+      bi._x = bi._x + offset * bi._v.x;
+      bi._y = bi._y + offset * bi._v.y;
 
-      bj._x = bj._x + offset * bj.v.x;
-      bj._y = bj._y + offset * bj.v.y;
+      bj._x = bj._x + offset * bj._v.x;
+      bj._y = bj._y + offset * bj._v.y;
     }
 
     return { dAbs: d, dX: dx, dY: dy };
