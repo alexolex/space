@@ -11,14 +11,13 @@ let scr = new Screen(ctx, 800, 600);
 let world = new World(ctx, scr, 0);
 
 var ship = new Ship(ctx, scr);
-new InputHandler(ship);
 var b1 = new Body(ctx, scr);
 // b1._x = 300;
 // b1._y = 300;
 // b1._v.x = 0;
 // b1._v.y = 0;
 
-var b2 = new Body(ctx, scr);
+//var b2 = new Body(ctx, scr);
 // b2._x = 100;
 // b2._y = 380;
 // b2._v.x = 1;
@@ -26,7 +25,7 @@ var b2 = new Body(ctx, scr);
 
 world.addBody(ship);
 world.addBody(b1);
-world.addBody(b2);
+// world.addBody(b2);
 
 let lastTime = 0;
 
