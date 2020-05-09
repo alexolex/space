@@ -38,19 +38,7 @@ export default class Body {
   getR() {
     return this._w / 2;
   }
-
-  draw() {
-    //this._ctx.fillStyle = this.color;
-    //this._ctx.fillRect(this.x, this.y, this.w, this.h);
-
-    this._ctx.beginPath();
-    this._ctx.arc(this._x, this._y, this._w / 2, 0, 2 * Math.PI);
-    this._ctx.fillStyle = this.color;
-    this._ctx.fill();
-    this._ctx.strokeStyle = this.color;
-    this._ctx.stroke();
-  }
-
+  
   update(dt) {
     // delta time
     if (!dt) return;
@@ -71,10 +59,30 @@ export default class Body {
       this._v.y = -1;
     }
 
-    let step = 30 / dt;
+    let step = 0.3 * dt;
 
     // move
     this._x = this._x + step * this._v.x;
-    this._y = this._y + step * this._v.y;
+    this._y = this._y + step * this._v.y;    
+  }
+
+  draw() {
+    //this._ctx.fillStyle = this.color;
+    //this._ctx.fillRect(this.x, this.y, this.w, this.h);
+
+    this._ctx.beginPath();
+    this._ctx.arc(this._x, this._y, this._w / 2, 0, 2 * Math.PI);
+    this._ctx.fillStyle = this.color;
+    this._ctx.fill();
+    this._ctx.strokeStyle = this.color;
+    this._ctx.stroke();
+
+    this.print(`${this._v.x}, ${this._v.y}`);
+  }
+
+  print(text, x=10, y=15) {
+    this._ctx.font = "15px Arial";
+    this._ctx.fillStyle = "#000";
+    this._ctx.fillText(text, x, y);
   }
 }

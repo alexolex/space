@@ -24,7 +24,7 @@ var b1 = new Body(ctx, scr);
 // b2._v.y = 0;
 
 world.addBody(ship);
-world.addBody(b1);
+//world.addBody(b1);
 // world.addBody(b2);
 
 let lastTime = 0;
