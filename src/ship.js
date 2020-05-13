@@ -4,8 +4,8 @@ export default class Ship extends Body {
   constructor(ctx, scr) {
     super(ctx, scr);
 
-    this._w = 30;
-    this._h = 30;
+    this._w = 20;
+    this._h = 20;
 
     this._accMod = 0;
     this._accVec = {
@@ -25,26 +25,28 @@ export default class Ship extends Body {
       switch (e.keyCode) {
         case 38:
           // rear thruster
+  
+          var accXY = this.toXY(0, 1); 
           
-          var dv = {
-            "dx": Math.cos((this._r) * Math.PI / 180),
-            "dy": Math.sin((this._r) * Math.PI / 180),
+          var curAccMod = Math.sqrt(Math.pow(this._accVec.dx, 2.0) + Math.pow(this._accVec.dy, 2.0));
+          //TODO: ship's acc is bound by force that thruster gives, not by itself.
+          var maxAcc = 3.0;
+
+          //TODO: update _accVec in "update" method. 
+          //TODO: Here update only thruster's force.
+          if (curAccMod < maxAcc){
+            ship._accVec = {
+              "dx" : ship._accVec.dx + accXY.dx * 0.1,
+              "dy" : ship._accVec.dy + accXY.dy * 0.1
+            }
+          }
+          else{
+            ship._accVec = {
+              "dx" : (ship._accVec.dx / curAccMod) * (maxAcc - 0.1),
+              "dy" : (ship._accVec.dy / curAccMod) * (maxAcc - 0.1)
+            }
           }
 
-          ship._accVec = {
-            "dx" : ship._accVec.dx + dv.dx,
-            "dy" : ship._accVec.dy - dv.dy
-          }
-          
-          // var dvMod = Math.abs(Math.sqrt(Math.pow(ship._accVec.dx, 2.0) + Math.pow(ship._accVec.dy, 2.0)));
-
-          // ship._accVec.dx = ship._accVec.dx / dvMod;
-          // ship._accVec.dy = ship._accVec.dy / dvMod;
-
-          //ship._accMod = 0.1;//ship._accMod + newVMod;
-
-          // ship._v.x = this._speed * Math.cos(this._r * Math.PI / 180);
-          // ship._v.y = this._speed * -Math.sin(this._r * Math.PI / 180);
           break;
         case 40:
           // front thruster
@@ -52,29 +54,17 @@ export default class Ship extends Body {
         case 37:
           //rotate left
           ship._r = ship._r + 5;
-          if (ship._r > 360) ship._r-=360;
-          //ship._v.x = Math.cos(this._r * Math.PI / 180);
+          if (ship._r > 360) ship._r-=360;          
           break;
         case 39:
           //rotate right
           ship._r = ship._r - 5;
           if (ship._r < -360) ship._r+=360;
-          //ship._v.y = -Math.sin(this._r * Math.PI / 180);
           break;
         default:
           break;
       }
     });
-  }
-
-  update(dt) {
-    // delta time
-    if (!dt) return;
-
-    var weight = 0.01;
-    
-    this._x = this._x + weight * 0.5 * this._accVec.dx * Math.pow(dt, 2.0);
-    this._y = this._y + weight * 0.5 * this._accVec.dy * Math.pow(dt, 2.0);
   }
 
   toXY(r, d) {
@@ -84,11 +74,30 @@ export default class Ship extends Body {
     }
   }
 
-  draw() {
-    this.print(`acc: ${this._accVec.dx.toFixed(2)}, ${this._accVec.dy.toFixed(2)}`);
-    this.print(`r: ${this._r}`, 10, 30);
+  update(dt) {
+    // delta time
+    if (!dt) return;
+
+    var weight = 0.005;
+    
+    this._x = this._x + weight * 0.5 * this._accVec.dx * Math.pow(dt, 2.0);
+    this._y = this._y + weight * 0.5 * this._accVec.dy * Math.pow(dt, 2.0);
+  }
+
+  drawPanel(){
+    
+    var accMod = Math.abs(Math.sqrt(Math.pow(this._accVec.dx, 2.0) + Math.pow(this._accVec.dy, 2.0)));    
+
+    this.print(
+      `ACC: [${accMod.toFixed(2)}] (${this._accVec.dx.toFixed(2)}, ${this._accVec.dy.toFixed(2)})`, 
+      10, 
+      this._scr.h - 30);
+    this.print(`ROT: ${this._r}°`, 10, this._scr.h - 14);
 
 
+  }
+
+  draw() {    
     var d = this._w / 2;
     var x = this._x;
     var y = this._y;
@@ -117,5 +126,7 @@ export default class Ship extends Body {
 
     this._ctx.strokeStyle = "#000";
     this._ctx.stroke();    
+
+    this.drawPanel();
   }
 }
