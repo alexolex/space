@@ -63,25 +63,33 @@ export default class Screen {
     this._ctx.fillText(`${this._azimuth}, ${this._inclination }`, 10, this._h - 15);
   }
 
-  in_view(az){
+  in_view(az, incl){
+    return this.in_az_range(az) && this.in_incl_range(incl);
+  }
+
+  in_incl_range(incl){
+
+    var top = this._inclination + this._view_angle;
+    var btm = this._inclination - this._view_angle;      
+
+    if (top < 360 && btm >= 0) {
+      return incl >= btm && incl <= top;
+    }
+    else {
+      
+      if (top < 360){
+        return incl <= top || incl >= 360 + btm;
+      }
+      else{
+        return incl <= (top - 360) || incl >= btm;
+      }
+    }
+}
+
+  in_az_range(az){
 
       var lb = this._azimuth + this._view_angle;
-      var rb = this._azimuth - this._view_angle;
-      
-      /*
-    scr.az   lb;   rb
-
-        30: 60; 0
-
-        20: 50; 360 - 10
-        10: 40; 360 - 20
-        0: 30; 360 - 30
-                         lb < 360 && az <= lb || az >= (360 + rb)
-      350:  380 - 360 = 20; 320
-      340:  370 - 360 = 10; 310
-      330:  360 - 360 = 0; 300
-                         lb >= 360 && az <= (lb - 360) && az >= rb
- &&      */
+      var rb = this._azimuth - this._view_angle;      
 
       if (lb < 360 && rb >= 0) {
         return az >= rb && az <= lb;
@@ -95,7 +103,5 @@ export default class Screen {
           return az <= (lb - 360) || az >= rb;
         }
       }
-
-      
   }
 }

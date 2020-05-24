@@ -20,7 +20,7 @@ export default class World {
       bi.update(dt);
 
       
-      if (this._scr.in_view(bi._azimuth)){
+      if (this._scr.in_view(bi._azimuth, bi._inclination)){
           
         
             // bi is within the view
