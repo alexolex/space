@@ -19,9 +19,11 @@ for (var i=0; i<36; ++i){
   world.addBody(b1);
 }
 
-for (var i=1; i<5; ++i){
+for (var i=1; i<36; ++i){
   
   var b1 = new SphericalBody(ctx, scr);
+  b1._r = 10;
+  b1._color = "#AA5511"
   b1._azimuth = 0;
   b1._inclination = i*10;
 
