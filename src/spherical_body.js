@@ -1,9 +1,8 @@
-import { getRandomInt, getRandomColor } from "/src/utils.js";
 
 export default class SphericalBody {
   constructor(ctx, scr) {
 
-    this._r = 30;
+    this._r = 5;
 
     this._azimuth = 0.0;
     this._inclination  = 0.0;
@@ -14,23 +13,29 @@ export default class SphericalBody {
     this._color = "#00AAFF";
   }
 
-
   update(dt) {
     // delta time
     if (!dt) return;
   }
 
+  getX() {
+    var d_az = this._scr._azimuth - this._azimuth;
+    var d_az_sin = Math.sin(d_az * Math.PI / 180);
+
+    return this._scr._w / 2 + this._scr._radius * d_az_sin;
+  }
+
+  getY() {
+    var d_incl = this._scr._inclination - this._inclination;
+    var d_incl_sin = Math.sin(d_incl * Math.PI / 180);
+
+    return this._scr._h / 2 + this._scr._radius * d_incl_sin;
+  }
 
   draw(){
 
-      var d_az = this._scr._azimuth - this._azimuth;
-      var d_az_sin = Math.sin(d_az * Math.PI / 180);
-          
-      var d_incl = this._scr._inclination - this._inclination;
-      var d_incl_sin = Math.sin(d_incl * Math.PI / 180);
-
-      var x = this._scr._w / 2 + this._scr._radius * d_az_sin;
-      var y = this._scr._h / 2 + this._scr._radius * d_incl_sin;
+      var x = this.getX();
+      var y = this.getY();
 
       this._ctx.beginPath();
       this._ctx.arc(x, y, this._r, 0, 2 * Math.PI);

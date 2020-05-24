@@ -21,8 +21,7 @@ export default class World {
 
       
       if (this._scr.in_view(bi._azimuth, bi._inclination)){
-          
-        
+                  
             // bi is within the view
             bi.draw();
       }
