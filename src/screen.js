@@ -9,9 +9,11 @@ export default class Screen {
     this._inclination  = 0.0;
 
     this._radius = 800;
-    this._view_angle_sin = (this._w / 2) / this._radius;
+    this._az_range_sin = (this._w / 2) / this._radius;
+    this._incl_range_sin = (this._h / 2) / this._radius;
 
-    this._view_angle = Math.fround(Math.asin(this._view_angle_sin) * 180 / Math.PI);
+    this._az_range = Math.fround(Math.asin(this._az_range_sin) * 180 / Math.PI);
+    this._incl_range = Math.fround(Math.asin(this._incl_range_sin) * 180 / Math.PI);
 
     document.addEventListener("keydown", e => {
       
@@ -69,8 +71,8 @@ export default class Screen {
 
   in_incl_range(incl){
 
-    var top = this._inclination + this._view_angle;
-    var btm = this._inclination - this._view_angle;      
+    var top = this._inclination + this._incl_range;
+    var btm = this._inclination - this._incl_range;      
 
     if (top < 360 && btm >= 0) {
       return incl >= btm && incl <= top;
@@ -88,8 +90,8 @@ export default class Screen {
 
   in_az_range(az){
 
-      var lb = this._azimuth + this._view_angle;
-      var rb = this._azimuth - this._view_angle;      
+      var lb = this._azimuth + this._az_range;
+      var rb = this._azimuth - this._az_range;      
 
       if (lb < 360 && rb >= 0) {
         return az >= rb && az <= lb;
