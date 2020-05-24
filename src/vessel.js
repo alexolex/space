@@ -61,6 +61,33 @@ export default class Vessel extends SphericalBody {
         this._thruster.update(dt);
 
         // TODO: make it move
+        /*
+
+            1. get current (x,y)
+            2. update (x,y)
+            3. translate to (az, incl)
+
+        */
+
+        var acc = this._thruster._acceleration;
+        var dir = this._direction_angle * Math.PI / 180;
+
+        var dx = 0.5 * acc * Math.cos(dir) * Math.pow(dt, 2.0);
+        var dy = 0.5 * acc * Math.sin(dir) * Math.pow(dt, 2.0);
+
+        var newX = this.getX() + dx;
+        var newY = this.getY() - dy;
+
+        this.print(`${newX.toFixed(1)}, ${newY.toFixed(1)}`, 10, 60);
+        
+        // TODO: to methods
+        var newAz = this._scr._azimuth - Math.asin((newX - this._scr._w / 2) / this._scr._radius) * 180 / Math.PI;
+        var newIncl = this._scr._inclination - Math.asin((newY - this._scr._h / 2) / this._scr._radius) * 180 / Math.PI;
+
+        this.print(`${newAz.toFixed(1)}, ${newIncl.toFixed(1)}`, 10, 80);
+
+        this._azimuth = newAz;
+        this._inclination = newIncl;
     }
 
     draw() {
@@ -93,13 +120,13 @@ export default class Vessel extends SphericalBody {
         this.drawDashboard();
     }
 
-    drawDashboard(){
-            
-        this.print(
-          `ACC: [${this._thruster._is_on}]`, 
-          10, 
-          40);
+    drawDashboard() {
 
-        this.print(`THR: ${this._thruster._acceleration}`);        
-      }
+        this.print(
+            `ACC: [${this._thruster._is_on}]`,
+            10,
+            40);
+
+        this.print(`THR: ${this._thruster._acceleration.toFixed(3)}`);
+    }
 }
