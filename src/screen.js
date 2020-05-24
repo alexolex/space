@@ -62,7 +62,7 @@ export default class Screen {
   draw() {
     this._ctx.font = "15px Arial";
     this._ctx.fillStyle = "#000";
-    this._ctx.fillText(`${this._azimuth}, ${this._inclination }`, 10, this._h - 15);
+    this._ctx.fillText(`SCR_AZ, SCR_INCL: ${this._azimuth}, ${this._inclination }`, 10, this._h - 15);
   }
 
   in_view(az, incl){

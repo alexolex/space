@@ -1,5 +1,6 @@
 import SphericalBody from "/src/spherical_body.js";
 import Thruster from "/src/thruster.js";
+import { round } from "/src/utils.js";
 
 export default class Vessel extends SphericalBody {
     constructor(ctx, scr) {
@@ -60,15 +61,6 @@ export default class Vessel extends SphericalBody {
 
         this._thruster.update(dt);
 
-        // TODO: make it move
-        /*
-
-            1. get current (x,y)
-            2. update (x,y)
-            3. translate to (az, incl)
-
-        */
-
         var acc = this._thruster._acceleration;
         var dir = this._direction_angle * Math.PI / 180;
 
@@ -78,16 +70,31 @@ export default class Vessel extends SphericalBody {
         var newX = this.getX() + dx;
         var newY = this.getY() - dy;
 
-        this.print(`${newX.toFixed(1)}, ${newY.toFixed(1)}`, 10, 60);
-        
-        // TODO: to methods
-        var newAz = this._scr._azimuth - Math.asin((newX - this._scr._w / 2) / this._scr._radius) * 180 / Math.PI;
-        var newIncl = this._scr._inclination - Math.asin((newY - this._scr._h / 2) / this._scr._radius) * 180 / Math.PI;
+        // Cartesians to spherical
+        var newAz = round(this._scr._azimuth - Math.asin((newX - this._scr._w / 2) / this._scr._radius) * 180 / Math.PI);
+        var newIncl = round(this._scr._inclination - Math.asin((newY - this._scr._h / 2) / this._scr._radius) * 180 / Math.PI);
 
-        this.print(`${newAz.toFixed(1)}, ${newIncl.toFixed(1)}`, 10, 80);
+        this.print(`AZ, INCL: ${newAz.toFixed(1)}, ${newIncl.toFixed(1)}`, 10, 60);
 
         this._azimuth = newAz;
+        if (this._azimuth > 360){
+            this._azimuth -= 360;
+        }
+        if (this._azimuth < 0){
+            this._azimuth += 360;
+        }
+        
         this._inclination = newIncl;
+        if (this._inclination > 360){
+            this._inclination -= 360;
+        }
+        if (this._inclination < 0){
+            this._inclination += 360;
+        }
+        
+        // Attach the screen to the vessel
+        this._scr._azimuth = this._azimuth;
+        this._scr._inclination = this._inclination;
     }
 
     draw() {
@@ -122,11 +129,8 @@ export default class Vessel extends SphericalBody {
 
     drawDashboard() {
 
-        this.print(
-            `ACC: [${this._thruster._is_on}]`,
-            10,
-            40);
+        this.print(`ACC: [${this._thruster._is_on}]`, 10, 20);
 
-        this.print(`THR: ${this._thruster._acceleration.toFixed(3)}`);
+        this.print(`THR: ${this._thruster._acceleration.toFixed(3)}`, 10, 40);
     }
 }

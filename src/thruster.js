@@ -20,13 +20,18 @@ export default class Thruster {
     update(dt) {
         // linear
         var acc_step = 0.01;
-        var max_acc = 3;
+        var max_acc = 0.1;
 
-        if (this._is_on && this._acceleration < max_acc) {
-            this._acceleration += acc_step;
+        if (this._is_on) {
+            if (this._acceleration < max_acc) {
+                this._acceleration += acc_step;
+            }
+            else {
+                // this._acceleration = acc_step;
+            }
         }
         else if (this._acceleration > 0) {
-            this._acceleration -= acc_step;
+            //this._acceleration -= acc_step;
         }
     }
 }

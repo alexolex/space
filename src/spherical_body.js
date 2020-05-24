@@ -44,7 +44,7 @@ export default class SphericalBody {
       this._ctx.strokeStyle = this._color;
       this._ctx.stroke();
 
-      this.print(`${this._azimuth}, ${this._inclination}`, x - 5, y + 5)      
+      this.print(`${this._azimuth}, ${this._inclination}`, x - 5, y + 5)
   }
 
   print(text, x = 10, y = 15) {

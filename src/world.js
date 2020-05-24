@@ -1,4 +1,3 @@
-import Body from "/src/body.js";
 
 export default class World {
   constructor(ctx, scr) {

@@ -10,3 +10,7 @@ export function getRandomColor() {
 export function getRandomInt(exclMax) {
   return Math.floor(Math.random() * exclMax);
 }
+
+export function round(value, decimals = 1) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
