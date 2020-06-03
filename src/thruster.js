@@ -13,7 +13,9 @@ export default class Thruster {
         this._is_on = true;
         this._angle = angle;
 
-        this.update();
+        this._value = 1000;
+
+        //this.update();
     }
 
     off(){
@@ -22,29 +24,29 @@ export default class Thruster {
     }
 
     update(dt) {
-        // linear
-        var value_step = 1;
-        var max_value = 100;
+        
+        // var value_step = 1;
+        // var max_value = 100;
 
-        if (this._is_on) {
-            if (this._value < max_value) {
-                this._value += value_step;
-            }            
-        }
-        else if (this._value > 0) {
-            //this._value -= value_step;
-        }
+        // if (this._is_on) {
+        //     if (this._value < max_value) {
+        //         this._value += value_step;
+        //     }            
+        // }
+        // else if (this._value > 0) {
+        //     //this._value -= value_step;
+        // }
     }
 
-    // TODO: not here
-    get_acc_vec() {
-        var value = this._value;
-        var angle = this._angle * Math.PI / 180;
-        var w = 0.05; 
+    // // TODO: not here
+    // get_acc_vec() {
+    //     var value = this._value;
+    //     var angle = this._angle * Math.PI / 180;
+    //     var w = 0.05; 
 
-        return {
-            "x" : value * Math.cos(angle) * w,
-            "y" : value * Math.sin(angle) * w
-        }
-    }
+    //     return {
+    //         "x" : value * Math.cos(angle) * w,
+    //         "y" : value * Math.sin(angle) * w
+    //     }
+    // }
 }

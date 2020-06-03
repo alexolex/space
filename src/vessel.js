@@ -10,9 +10,9 @@ export default class Vessel extends SphericalBody {
         this._direction_angle = 90;
 
         // vessel's current acceleration vector
-        this._acc = {
-            "x" : 0.0,
-            "y" : 0.0
+        this._vel = {
+            "x": 0.0,
+            "y": 0.0
         }
 
         this._thruster = new Thruster(ctx, scr, this._direction_angle);
@@ -34,15 +34,6 @@ export default class Vessel extends SphericalBody {
                 case 38:
                     // rear thrusters
                     this._thruster.on(this._direction_angle);
-
-                    var acc_upd = this._thruster.get_acc_vec();
-                    this._acc = {
-                        "x" : Math.fround(this._acc.x + acc_upd.x),
-                        "y" : Math.fround(this._acc.y + acc_upd.y)
-                    }
-
-                    console.log(this._acc.x);
-                    console.log(this._acc.y);     
                     break;
                 case 40:
                     // front thrusters
@@ -55,7 +46,7 @@ export default class Vessel extends SphericalBody {
                 case 39:
                     // rotate counterclockwise
                     ship._direction_angle = ship._direction_angle - rot_step;
-                    if (ship._direction_angle < -360) ship._direction_angle += 360;
+                    if (ship._direction_angle < 0) ship._direction_angle += 360;
                     break;
                 default:
                     break;
@@ -72,37 +63,55 @@ export default class Vessel extends SphericalBody {
 
     update(dt) {
         if (!dt) return;
+        
+        var thr = this._thruster;  
+        thr.update(dt);
 
-        this._thruster.update(dt);
+        var dt_sec = dt / 1000;        
 
-        var dx = 1;//0.5 * this._acc.x * Math.pow(dt, 2.0);
-        var dy = 1;//0.5 * this._acc.y * Math.pow(dt, 2.0);
+        // acceleration from the thruster
+        var acc = {
+            "x": thr._value * Math.cos(thr._angle * Math.PI / 180),
+            "y": thr._value * Math.sin(thr._angle * Math.PI / 180)
+        };
+        this.print(`ACC: [${acc.x.toFixed(2)}, ${acc.y.toFixed(2)}]`, 10, 100);
+
+        // velocity update
+        this._vel = {
+            "x": this._vel.x + acc.x * dt_sec,
+            "y": this._vel.y + acc.y * dt_sec
+        }
+
+        // displacement update
+        var dx = this._vel.x * dt_sec;
+        var dy = -1 * this._vel.y * dt_sec;
+        this.print(`dx, dy: ${dx.toFixed(1)}, ${dy.toFixed(1)}`, 10, 60);
 
         var newX = this.getX() + dx;
-        var newY = this.getY() - dy;
-
+        var newY = this.getY() + dy;
+        
+        this.print(`DIR: ${this._direction_angle}`, 10, 80);
+        
         // Cartesians to spherical
         var newAz = round(this._scr._azimuth - Math.asin((newX - this._scr._w / 2) / this._scr._radius) * 180 / Math.PI);
         var newIncl = round(this._scr._inclination - Math.asin((newY - this._scr._h / 2) / this._scr._radius) * 180 / Math.PI);
 
-        this.print(`AZ, INCL: ${newAz.toFixed(1)}, ${newIncl.toFixed(1)}`, 10, 60);        
-
         this._azimuth = newAz;
-        if (this._azimuth > 360){
+        if (this._azimuth > 360) {
             this._azimuth -= 360;
         }
-        if (this._azimuth < 0){
+        if (this._azimuth < 0) {
             this._azimuth += 360;
         }
-        
+
         this._inclination = newIncl;
-        if (this._inclination > 360){
+        if (this._inclination > 360) {
             this._inclination -= 360;
         }
-        if (this._inclination < 0){
+        if (this._inclination < 0) {
             this._inclination += 360;
         }
-        
+
         // Attach the screen to the vessel
         this._scr._azimuth = this._azimuth;
         this._scr._inclination = this._inclination;
@@ -140,8 +149,8 @@ export default class Vessel extends SphericalBody {
 
     drawDashboard() {
 
-        this.print(`ACC: [${this._acc.x.toFixed(2)}, ${this._acc.y.toFixed(2)}]`, 10, 20);
+        this.print(`VEL: [${this._vel.x.toFixed(2)}, ${this._vel.y.toFixed(2)}]`, 10, 20);
 
-        this.print(`THR: ${this._thruster._value.toFixed(3)}, ${this._thruster._angle.toFixed(3)}`, 10, 40);
+        this.print(`THR: ${this._thruster._value.toFixed(2)}, ${this._thruster._angle.toFixed(2)}`, 10, 40);
     }
 }
