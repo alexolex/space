@@ -7,7 +7,7 @@ export default class Vessel extends SphericalBody {
         super(ctx, scr);
 
         this._r = 20;
-        this._direction_angle = 90;
+        this._direction_angle = 0;
 
         // vessel's current acceleration vector
         this._vel = {
@@ -140,10 +140,12 @@ export default class Vessel extends SphericalBody {
 
         }
 
-        this._ctx.strokeStyle = "#000";
+        this._ctx.strokeStyle = "#ABC";
         this._ctx.stroke();
+        this._ctx.fillStyle = "#ABC";
         this._ctx.fill();
 
+        this._thruster.draw(x, y, this._direction_angle);
         this.drawDashboard();
     }
 

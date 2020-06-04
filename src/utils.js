@@ -14,3 +14,10 @@ export function getRandomInt(exclMax) {
 export function round(value, decimals = 1) {
   return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
 }
+
+export function sphericalToCartesian(angle, dist) {
+  return {
+      "x": dist * Math.cos(angle * Math.PI / 180),
+      "y": dist * Math.sin(angle * Math.PI / 180),
+  }
+}
