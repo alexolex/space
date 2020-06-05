@@ -67,7 +67,7 @@ export default class Vessel extends SphericalBody {
         var thr = this._thruster;  
         thr.update(dt);
 
-        var dt_sec = dt / 1000;        
+        var dt_sec = dt / 1000;
 
         // acceleration from the thruster
         var acc = {
@@ -84,11 +84,11 @@ export default class Vessel extends SphericalBody {
 
         // displacement update
         var dx = this._vel.x * dt_sec;
-        var dy = -1 * this._vel.y * dt_sec;
+        var dy = this._vel.y * dt_sec;
         this.print(`dx, dy: ${dx.toFixed(1)}, ${dy.toFixed(1)}`, 10, 60);
 
         var newX = this.getX() + dx;
-        var newY = this.getY() + dy;
+        var newY = this.getY() - dy;
         
         this.print(`DIR: ${this._direction_angle}`, 10, 80);
         

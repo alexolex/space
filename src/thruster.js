@@ -24,21 +24,21 @@ export default class Thruster {
         var dt_sec = dt / 1000;
 
         // per sec
-        var value_step = 3000;
+        var value_step = 10;
         
-        var max_value = 100;
-
+        var max_value = 100;        
         if (this._is_on) {
-
-            if (this._value < max_value) {
-                this._value += value_step * dt_sec;
-            }            
+            this._value = 100;
+            // if (this._value < max_value) {
+            //     this._value += value_step;
+            // }
         }
-        else {            
-            this._value -= value_step * dt_sec * 0.5;
-            if (this._value < 0){
-                this._value = 0;
-            }
+        else { 
+            this._value = 0;           
+            // this._value -= value_step;
+            // if (this._value < 0){
+            //     this._value = 0;
+            // }
         }
     }
 
