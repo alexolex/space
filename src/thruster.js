@@ -6,7 +6,7 @@ export class AzimuthThruster {
 
         this._value = 0;
         this._step = 5;
-        this._ctx = ctx;        
+        this._ctx = ctx;
     }
 
     left() {
@@ -22,7 +22,7 @@ export class AzimuthThruster {
     }
 }
 
-export class Thruster extends SphericalBody{
+export class Thruster extends SphericalBody {
     constructor(ctx, scr, angle) {
 
         super(ctx, scr);
@@ -66,26 +66,16 @@ export class Thruster extends SphericalBody{
 
     draw(base_angle) {
 
-        var engine = [
-            { "angle": 0, "dist": -5 },
-            { "angle": 150, "dist": 20 },
-            { "angle": 210, "dist": 20 },
-            { "angle": 0, "dist": -5 }
-        ]
+        if (this._is_on) {
+            var d = 25;
+            var engine = [
+                { "angle": 0, "dist": -1 * d },
+                { "angle": 160, "dist": 15 },
+                { "angle": 200, "dist": 15 },
+                { "angle": 0, "dist": -1 * d }
+            ]
 
-        this.render(engine, base_angle, "#A00", "#A00"); 
-
-        // Thrust
-        // this._ctx.beginPath();
-        // this._ctx.moveTo(x + p0.x, y + p0.y);
-
-        // var thrust_length = 0;
-        // if (this._value > 50) {
-        //     thrust_length = 100 - 1 / (this._value * 0.001);
-        // }
-        // var p = sphericalToCartesian(shape[0].angle - angle, shape[0].dist - thrust_length);
-        // this._ctx.lineTo(x + p.x, y + p.y);
-        // this._ctx.strokeStyle = "#A00";
-        // this._ctx.stroke();
+            this.render(engine, base_angle, "#A00", "#A00");
+        }
     }
 }

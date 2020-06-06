@@ -1,6 +1,6 @@
 import SphericalBody from "/src/spherical_body.js";
 import { Thruster, AzimuthThruster } from "/src/thruster.js";
-import { round, sphericalToCartesian } from "/src/utils.js";
+import { round } from "/src/utils.js";
 
 export default class Vessel extends SphericalBody {
     constructor(ctx, scr) {
@@ -15,8 +15,7 @@ export default class Vessel extends SphericalBody {
             "y": 0.0
         }
 
-        this._thruster = new Thruster(ctx, scr, this._direction_angle);
-        this._az_thruster = new AzimuthThruster(ctx);
+        this._thruster = new Thruster(ctx, scr, this._direction_angle);        
 
         var ship = this;
         document.addEventListener("keyup", e => {
@@ -41,28 +40,18 @@ export default class Vessel extends SphericalBody {
                     break;
                 case 37:
                     // rotate clockwise
-                    // ship._direction_angle = ship._direction_angle + rot_step;
-                    // if (ship._direction_angle > 360) ship._direction_angle -= 360;
-                    ship._az_thruster.left();
-                    ship.update_direction_angle();
+                    ship._direction_angle = ship._direction_angle + rot_step;
+                    if (ship._direction_angle > 360) ship._direction_angle -= 360;
                     break;
                 case 39:
                     // rotate counterclockwise
-                    // ship._direction_angle = ship._direction_angle - rot_step;
-                    // if (ship._direction_angle < 0) ship._direction_angle += 360;
-                    ship._az_thruster.right();
-                    ship.update_direction_angle();
+                    ship._direction_angle = ship._direction_angle - rot_step;
+                    if (ship._direction_angle < 0) ship._direction_angle += 360;                    
                     break;
                 default:
                     break;
             }
         });
-    }
-
-    update_direction_angle() {
-        this._direction_angle += this._az_thruster._value;
-        if (this._direction_angle > 360) { this._direction_angle -= 360; }
-        if (this._direction_angle < 0) { this._direction_angle += 360; }
     }
 
     getCartesianOffset(angle, dist) {
@@ -126,24 +115,23 @@ export default class Vessel extends SphericalBody {
         this._scr._azimuth = this._azimuth;
         this._scr._inclination = this._inclination;
 
+        // Update child parts
         thr.update(dt, this._azimuth, this._inclination);
     }
 
-    draw() {
-
-        var x = this.getX();
-        var y = this.getY();
-
-        var shape = [
+    draw() {        
+        var ship = [
             { "angle": 0, "dist": this._r },
             { "angle": 135, "dist": this._r },
             { "angle": 225, "dist": this._r },
             { "angle": 0, "dist": this._r }
         ]
 
-        this.render(shape, this._direction_angle, "#ABC", "#ABC");
+        this.render(ship, this._direction_angle, "#ABC", "#ABC");
 
+        // Render child parts
         this._thruster.draw(this._direction_angle);
+        
         this.drawDashboard();
     }
 
