@@ -86,6 +86,7 @@ export default class Vessel extends SphericalBody {
         // displacement update
         var dx = this._vel.x * dt_sec;
         var dy = this._vel.y * dt_sec;
+        
         this.print(`dx, dy: ${dx.toFixed(1)}, ${dy.toFixed(1)}`, 10, 60);
 
         var newX = this.getX() + dx;

@@ -11,24 +11,16 @@ let scr = new Screen(ctx, 800, 600);
 
 let world = new World(ctx, scr, 0);
 
-for (var i=0; i<36; ++i){
-  var b1 = new SphericalBody(ctx, scr);
-  b1._azimuth = i*10;
-  b1._inclination = 0;
-  b1._color = "#fff"
+for (var i=0; i<36; ++i){  
+  for (var j=0; j<36; ++j){
   
-  world.addBody(b1);
-}
-
-for (var i=1; i<36; ++i){
+    var b1 = new SphericalBody(ctx, scr);
+    b1._r = 10;
+    b1._azimuth = i*10;;
+    b1._inclination = j*10;
   
-  var b1 = new SphericalBody(ctx, scr);
-  b1._r = 10;
-  b1._color = "#fff"
-  b1._azimuth = 0;
-  b1._inclination = i*10;
-
-  world.addBody(b1);
+    world.addToBackground(b1);
+  }
 }
 
 var vsl= new Vessel(ctx, scr);

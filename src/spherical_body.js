@@ -39,13 +39,14 @@ export default class SphericalBody {
     var y = this.getY();
 
     this._ctx.beginPath();
-    this._ctx.arc(x, y, this._r, 0, 2 * Math.PI);
-    this._ctx.fillStyle = this._color;
-    this._ctx.fill();
+    this._ctx.moveTo(x - 10, y);
+    this._ctx.lineTo(x + 10, y);
+
+    this._ctx.moveTo(x, y - 10);
+    this._ctx.lineTo(x, y + 10);
+
     this._ctx.strokeStyle = this._color;
     this._ctx.stroke();
-
-    this.print(`${this._azimuth}, ${this._inclination}`, x - 5, y + 5)
   }
 
   render(shape, base_angle, stroke="#A00", fill="#A00") {
