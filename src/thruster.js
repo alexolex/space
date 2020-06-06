@@ -1,24 +1,28 @@
 import { sphericalToCartesian } from "/src/utils.js";
 import SphericalBody from "/src/spherical_body.js";
 
-export class AzimuthThruster {
+export class RotationThruster {
     constructor(ctx) {
 
         this._value = 0;
-        this._step = 5;
+        this._mode = 0;
         this._ctx = ctx;
     }
 
     left() {
-        this._value = this._step;
-
+        this._mode = 1;
     }
 
     right() {
-        this._value = -1 * this._step;
+        this._mode = -1;
+    }
+
+    off() {
+        this._mode = 0;
     }
 
     update() {
+        this._value = 3 * this._mode;
     }
 }
 
