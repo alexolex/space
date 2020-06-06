@@ -1,3 +1,4 @@
+import { render } from "/src/utils.js";
 
 export default class SphericalBody {
   constructor(ctx, scr) {
@@ -5,7 +6,7 @@ export default class SphericalBody {
     this._r = 5;
 
     this._azimuth = 0.0;
-    this._inclination  = 0.0;
+    this._inclination = 0.0;
 
     this._ctx = ctx;
     this._scr = scr;
@@ -32,19 +33,26 @@ export default class SphericalBody {
     return this._scr._h / 2 + this._scr._radius * d_incl_sin;
   }
 
-  draw(){
+  draw() {
 
-      var x = this.getX();
-      var y = this.getY();
+    var x = this.getX();
+    var y = this.getY();
 
-      this._ctx.beginPath();
-      this._ctx.arc(x, y, this._r, 0, 2 * Math.PI);
-      this._ctx.fillStyle = this._color;
-      this._ctx.fill();
-      this._ctx.strokeStyle = this._color;
-      this._ctx.stroke();
+    this._ctx.beginPath();
+    this._ctx.arc(x, y, this._r, 0, 2 * Math.PI);
+    this._ctx.fillStyle = this._color;
+    this._ctx.fill();
+    this._ctx.strokeStyle = this._color;
+    this._ctx.stroke();
 
-      this.print(`${this._azimuth}, ${this._inclination}`, x - 5, y + 5)
+    this.print(`${this._azimuth}, ${this._inclination}`, x - 5, y + 5)
+  }
+
+  render(shape, base_angle, stroke="#A00", fill="#A00") {
+    var x = this.getX();
+    var y = this.getY();
+
+    render(shape, this._ctx, base_angle, x, y, stroke, fill);
   }
 
   print(text, x = 10, y = 15) {

@@ -21,3 +21,22 @@ export function sphericalToCartesian(angle, dist) {
       "y": dist * Math.sin(angle * Math.PI / 180),
   }
 }
+
+export function render(shape, ctx, base_angle=0, x=0, y=0, stroke="#A00", fill="#A00") {
+ 
+  ctx.beginPath();
+
+  var p0 = sphericalToCartesian(shape[0].angle - base_angle, shape[0].dist);
+  ctx.moveTo(x + p0.x, y + p0.y);
+
+  for (var i = 1; i < shape.length; ++i) {
+
+    var pi = sphericalToCartesian(shape[i].angle - base_angle, shape[i].dist);
+    ctx.lineTo(x + pi.x, y + pi.y);
+  };
+
+  ctx.strokeStyle = stroke;
+  ctx.stroke();
+  ctx.fillStyle = fill;
+  ctx.fill();
+}

@@ -8,51 +8,12 @@ export default class Screen {
     this._azimuth = 0.0;
     this._inclination  = 0.0;
 
-    this._radius = 800;
+    this._radius = 1600;
     this._az_range_sin = (this._w / 2) / this._radius;
     this._incl_range_sin = (this._h / 2) / this._radius;
 
     this._az_range = Math.fround(Math.asin(this._az_range_sin) * 180 / Math.PI);
-    this._incl_range = Math.fround(Math.asin(this._incl_range_sin) * 180 / Math.PI);
-
-    // document.addEventListener("keydown", e => {
-      
-    //   var step = 1;
-    //   switch (e.keyCode) {
-    //     case 65:
-    //       //a left
-    //       this._azimuth += step;
-    //       if (this._azimuth >= 360){
-    //         this._azimuth -= 360;
-    //       }
-    //       break;
-    //     case 68:
-    //       //d right
-    //       this._azimuth -= step;
-    //       if (this._azimuth < 0){
-    //         this._azimuth = 360 + this._azimuth;
-    //       }
-    //       break;
-          
-    //     case 87:
-    //       //w up
-    //       this._inclination += step;
-    //       if (this._inclination >= 360){
-    //         this._inclination -= 360;
-    //       }
-    //       break;
-    //     case 83:
-    //       //s down
-    //       this._inclination -= step;
-    //       if (this._inclination < 0){
-    //         this._inclination = 360 + this._inclination;
-    //       }
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });// a=65, d=68, w=87, s=83
-
+    this._incl_range = Math.fround(Math.asin(this._incl_range_sin) * 180 / Math.PI);    
   }
 
   clear() {

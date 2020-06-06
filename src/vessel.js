@@ -1,12 +1,12 @@
 import SphericalBody from "/src/spherical_body.js";
-import Thruster from "/src/thruster.js";
-import { round } from "/src/utils.js";
+import { Thruster, AzimuthThruster } from "/src/thruster.js";
+import { round, sphericalToCartesian } from "/src/utils.js";
 
 export default class Vessel extends SphericalBody {
     constructor(ctx, scr) {
         super(ctx, scr);
 
-        this._r = 20;
+        this._r = 15;
         this._direction_angle = 0;
 
         // vessel's current acceleration vector
@@ -16,12 +16,13 @@ export default class Vessel extends SphericalBody {
         }
 
         this._thruster = new Thruster(ctx, scr, this._direction_angle);
+        this._az_thruster = new AzimuthThruster(ctx);
 
         var ship = this;
         document.addEventListener("keyup", e => {
             switch (e.keyCode) {
                 case 38:
-                    this._thruster.off();
+                    ship._thruster.off();
                     break;
             }
         });
@@ -33,25 +34,35 @@ export default class Vessel extends SphericalBody {
             switch (e.keyCode) {
                 case 38:
                     // rear thrusters
-                    this._thruster.on(this._direction_angle);
+                    ship._thruster.on(this._direction_angle);
                     break;
                 case 40:
                     // front thrusters
                     break;
                 case 37:
                     // rotate clockwise
-                    ship._direction_angle = ship._direction_angle + rot_step;
-                    if (ship._direction_angle > 360) ship._direction_angle -= 360;
+                    // ship._direction_angle = ship._direction_angle + rot_step;
+                    // if (ship._direction_angle > 360) ship._direction_angle -= 360;
+                    ship._az_thruster.left();
+                    ship.update_direction_angle();
                     break;
                 case 39:
                     // rotate counterclockwise
-                    ship._direction_angle = ship._direction_angle - rot_step;
-                    if (ship._direction_angle < 0) ship._direction_angle += 360;
+                    // ship._direction_angle = ship._direction_angle - rot_step;
+                    // if (ship._direction_angle < 0) ship._direction_angle += 360;
+                    ship._az_thruster.right();
+                    ship.update_direction_angle();
                     break;
                 default:
                     break;
             }
         });
+    }
+
+    update_direction_angle() {
+        this._direction_angle += this._az_thruster._value;
+        if (this._direction_angle > 360) { this._direction_angle -= 360; }
+        if (this._direction_angle < 0) { this._direction_angle += 360; }
     }
 
     getCartesianOffset(angle, dist) {
@@ -63,11 +74,10 @@ export default class Vessel extends SphericalBody {
 
     update(dt) {
         if (!dt) return;
-        
-        var thr = this._thruster;  
-        thr.update(dt);
 
         var dt_sec = dt / 1000;
+                
+        var thr = this._thruster;
 
         // acceleration from the thruster
         var acc = {
@@ -89,9 +99,9 @@ export default class Vessel extends SphericalBody {
 
         var newX = this.getX() + dx;
         var newY = this.getY() - dy;
-        
+
         this.print(`DIR: ${this._direction_angle}`, 10, 80);
-        
+
         // Cartesians to spherical
         var newAz = round(this._scr._azimuth - Math.asin((newX - this._scr._w / 2) / this._scr._radius) * 180 / Math.PI);
         var newIncl = round(this._scr._inclination - Math.asin((newY - this._scr._h / 2) / this._scr._radius) * 180 / Math.PI);
@@ -115,6 +125,8 @@ export default class Vessel extends SphericalBody {
         // Attach the screen to the vessel
         this._scr._azimuth = this._azimuth;
         this._scr._inclination = this._inclination;
+
+        thr.update(dt, this._azimuth, this._inclination);
     }
 
     draw() {
@@ -129,23 +141,9 @@ export default class Vessel extends SphericalBody {
             { "angle": 0, "dist": this._r }
         ]
 
-        this._ctx.beginPath();
+        this.render(shape, this._direction_angle, "#ABC", "#ABC");
 
-        var p0 = this.getCartesianOffset(shape[0].angle, shape[0].dist);
-        this._ctx.moveTo(x + p0.dx, y - p0.dy);
-        for (var i = 1; i < shape.length; ++i) {
-
-            var pi = this.getCartesianOffset(shape[i].angle, shape[i].dist);
-            this._ctx.lineTo(x + pi.dx, y - pi.dy);
-
-        }
-
-        this._ctx.strokeStyle = "#ABC";
-        this._ctx.stroke();
-        this._ctx.fillStyle = "#ABC";
-        this._ctx.fill();
-
-        this._thruster.draw(x, y, this._direction_angle);
+        this._thruster.draw(this._direction_angle);
         this.drawDashboard();
     }
 
