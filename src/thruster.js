@@ -37,18 +37,18 @@ export class Thruster extends SphericalBody {
         this._ctx = ctx;
     }
 
-    on(angle) {
+    on() {
         this._is_on = true;
-        this._angle = angle;
     }
 
     off() {
         this._is_on = false;
     }
 
-    update(dt, az, incl) {
+    update(dt, az, incl, angle) {
         this._azimuth = az;
         this._inclination = incl;
+        this._angle = angle;
 
         //var dt_sec = dt / 1000;
         // var value_step = 10;

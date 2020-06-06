@@ -47,7 +47,7 @@ export default class Vessel extends SphericalBody {
                     // rotate clockwise
                     this._rot_thruster.left();
                     break;
-                case 39:                    
+                case 39:
                     // rotate counterclockwise
                     this._rot_thruster.right();
                     break;
@@ -61,7 +61,7 @@ export default class Vessel extends SphericalBody {
         if (!dt) return;
 
         var dt_sec = dt / 1000;
-        
+
         // Rotation
         this._direction_angle = this._direction_angle + this._rot_thruster._value;
         if (this._direction_angle > 360) this._direction_angle -= 360;
@@ -86,7 +86,14 @@ export default class Vessel extends SphericalBody {
         // displacement update
         var dx = this._vel.x * dt_sec;
         var dy = this._vel.y * dt_sec;
-        
+
+        if (Math.abs(dx) < 1.5) {
+            dx = 0.0;
+        }
+        if (Math.abs(dy) < 1.5) {
+            dy = 0.0;
+        }
+
         this.print(`dx, dy: ${dx.toFixed(1)}, ${dy.toFixed(1)}`, 10, 60);
 
         var newX = this.getX() + dx;
@@ -119,11 +126,12 @@ export default class Vessel extends SphericalBody {
         this._scr._inclination = this._inclination;
 
         // Update child parts
-        thr.update(dt, this._azimuth, this._inclination);
         this._rot_thruster.update();
+
+        thr.update(dt, this._azimuth, this._inclination, this._direction_angle);
     }
 
-    draw() {        
+    draw() {
         var ship = [
             { "angle": 0, "dist": this._r },
             { "angle": 135, "dist": this._r },
@@ -135,7 +143,7 @@ export default class Vessel extends SphericalBody {
 
         // Render child parts
         this._thruster.draw(this._direction_angle);
-        
+
         this.drawDashboard();
     }
 
