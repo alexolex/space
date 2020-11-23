@@ -2,7 +2,10 @@ import SphericalBody from "/src/spherical_body.js";
 import { Thruster, RotationThruster } from "/src/thruster.js";
 import { round } from "/src/utils.js";
 
+const MAX_DISPLACEMENT = 5.0;
+
 export default class Vessel extends SphericalBody {
+
     constructor(ctx, scr) {
         super(ctx, scr);
 
@@ -18,17 +21,17 @@ export default class Vessel extends SphericalBody {
         this._thruster = new Thruster(ctx, scr, this._direction_angle);
         this._rot_thruster = new RotationThruster(ctx);
 
-        var ship = this;
+        var v = this;
         document.addEventListener("keyup", e => {
             switch (e.keyCode) {
                 case 38:
-                    ship._thruster.off();
+                    v._thruster.off();
                     break;
                 case 37:
-                    ship._rot_thruster.off();
+                    v._rot_thruster.off();
                     break;
                 case 39:
-                    ship._rot_thruster.off();
+                    v._rot_thruster.off();
                     break;
             }
         });
@@ -38,7 +41,7 @@ export default class Vessel extends SphericalBody {
             switch (e.keyCode) {
                 case 38:
                     // rear thrusters
-                    ship._thruster.on(this._direction_angle);
+                    v._thruster.on(this._direction_angle);
                     break;
                 case 40:
                     // front thrusters
@@ -86,6 +89,14 @@ export default class Vessel extends SphericalBody {
         // displacement update
         var dx = this._vel.x * dt_sec;
         var dy = this._vel.y * dt_sec;
+
+        if (Math.abs(dx) >= MAX_DISPLACEMENT){
+            dx = Math.sign(dx) * MAX_DISPLACEMENT;
+        }
+
+        if (Math.abs(dy) >= MAX_DISPLACEMENT){
+            dy = Math.sign(dy) * MAX_DISPLACEMENT;
+        }
 
         if (Math.abs(dx) < 1.5) {
             dx = 0.0;

@@ -50,21 +50,11 @@ export class Thruster extends SphericalBody {
         this._inclination = incl;
         this._angle = angle;
 
-        //var dt_sec = dt / 1000;
-        // var value_step = 10;
-        // var max_value = 1000;
         if (this._is_on) {
             this._value = 1000;
-            // if (this._value < max_value) {
-            //     this._value += value_step;
-            // }
         }
         else {
             this._value = 0;
-            // this._value -= value_step;
-            // if (this._value < 0){
-            //     this._value = 0;
-            // }
         }
     }
 
